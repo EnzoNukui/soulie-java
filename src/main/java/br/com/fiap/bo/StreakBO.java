@@ -2,33 +2,53 @@ package br.com.fiap.bo;
 
 import br.com.fiap.dao.StreakDAO;
 import br.com.fiap.to.StreakTO;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 
 public class StreakBO {
     private StreakDAO streakDAO = new StreakDAO();
 
     public ArrayList<StreakTO> listarTodos() {
-        return streakDAO.listarTodos();
+        ArrayList<StreakTO> streaks = streakDAO.listarTodos();
+        if (streaks != null) {
+            for (StreakTO streak : streaks) {
+                normalizarStreakAtual(streak);
+            }
+        }
+        return streaks;
     }
 
     public StreakTO buscarPorId(Long idStreak) {
-        return streakDAO.buscarPorId(idStreak);
+        return normalizarStreakAtual(streakDAO.buscarPorId(idStreak));
     }
 
     public StreakTO buscarPorUsuario(Long idUsuario) {
-        return streakDAO.buscarPorUsuario(idUsuario);
+        return normalizarStreakAtual(streakDAO.buscarPorUsuario(idUsuario));
+    }
+
+    private StreakTO normalizarStreakAtual(StreakTO streak) {
+        if (streak != null && streak.getDataUltimaAtividade() != null
+                && streak.getDataUltimaAtividade().isBefore(
+                        LocalDate.now(ZoneId.of("America/Sao_Paulo")).minusDays(1))) {
+            streak.setDiasConsecutivos(0);
+        }
+        return streak;
     }
 
     public StreakTO inserir(StreakTO streak) {
-        return streakDAO.inserir(streak);
+        // O streak é criado junto com o usuário e atualizado pelas atividades.
+        return null;
     }
 
     public StreakTO atualizar(StreakTO streak) {
-        return streakDAO.atualizar(streak);
+        // Dias e última atividade são calculados a partir do histórico de atividades.
+        return null;
     }
 
     public boolean excluir(Long idStreak) {
-        return streakDAO.excluir(idStreak);
+        // O streak faz parte da jornada e não pode ser removido isoladamente.
+        return false;
     }
 
 }

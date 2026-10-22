@@ -29,3 +29,27 @@ CREATE TABLE ATIVIDADE (
     CONSTRAINT ATIVIDADE_MISSAO_FK FOREIGN KEY (ID_MISSAO)
         REFERENCES MISSAO (ID_MISSAO)
 );
+
+-- Catálogo exigido pelas regras automáticas de conquista.
+-- O ID_CONQUISTA continua sendo gerado pelo Oracle.
+INSERT INTO CONQUISTA (NM_CONQUISTA, DS_CONQUISTA)
+SELECT 'Primeiros passos', 'Concluiu uma missão pela primeira vez.' FROM DUAL
+WHERE NOT EXISTS (SELECT 1 FROM CONQUISTA WHERE NM_CONQUISTA = 'Primeiros passos');
+
+INSERT INTO CONQUISTA (NM_CONQUISTA, DS_CONQUISTA)
+SELECT 'Consistência', 'Manteve atividades em dias consecutivos.' FROM DUAL
+WHERE NOT EXISTS (SELECT 1 FROM CONQUISTA WHERE NM_CONQUISTA = 'Consistência');
+
+INSERT INTO CONQUISTA (NM_CONQUISTA, DS_CONQUISTA)
+SELECT 'Semana sustentável', 'Alcançou sete dias consecutivos de atividade.' FROM DUAL
+WHERE NOT EXISTS (SELECT 1 FROM CONQUISTA WHERE NM_CONQUISTA = 'Semana sustentável');
+
+INSERT INTO CONQUISTA (NM_CONQUISTA, DS_CONQUISTA)
+SELECT 'Compromisso verde', 'Concluiu cinco missões oficiais.' FROM DUAL
+WHERE NOT EXISTS (SELECT 1 FROM CONQUISTA WHERE NM_CONQUISTA = 'Compromisso verde');
+
+INSERT INTO CONQUISTA (NM_CONQUISTA, DS_CONQUISTA)
+SELECT 'Soulie evoluída', 'Alcançou o nível três do avatar.' FROM DUAL
+WHERE NOT EXISTS (SELECT 1 FROM CONQUISTA WHERE NM_CONQUISTA = 'Soulie evoluída');
+
+COMMIT;

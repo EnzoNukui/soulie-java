@@ -51,7 +51,8 @@ public class UsuarioConquistaResource {
             if (resultado != null) {
                 return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
             } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Não foi possível cadastrar a conquista do usuário.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("As conquistas são concedidas automaticamente pelas regras da jornada.");
             }
 
         } catch (Exception e) {
@@ -69,7 +70,8 @@ public class UsuarioConquistaResource {
             if (resultado != null) {
                 return ResponseEntity.status(HttpStatus.OK).body(resultado);
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Conquista do usuário não encontrada para atualização.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("A concessão e a data da conquista são controladas pelo sistema.");
             }
 
         } catch (Exception e) {
@@ -82,7 +84,8 @@ public class UsuarioConquistaResource {
         if (usuarioConquistaBO.excluir(idUsuario, idConquista)) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Conquista do usuário excluída com sucesso.");
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Conquista do usuário não encontrada.");
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("A conquista registrada integra o histórico da jornada e não pode ser removida.");
         }
     }
 }

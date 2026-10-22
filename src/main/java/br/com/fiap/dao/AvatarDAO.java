@@ -7,6 +7,70 @@ import java.util.ArrayList;
 
 public class AvatarDAO {
 
+    public AvatarTO buscarPorUsuario(Connection conexao, Long idUsuario) {
+        String sql = "select * from AVATAR where ID_USUARIO = ?";
+        try (PreparedStatement ps = conexao.prepareStatement(sql)) {
+            ps.setLong(1, idUsuario);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    AvatarTO avatar = new AvatarTO();
+                    avatar.setIdAvatar(rs.getLong("ID_AVATAR"));
+                    avatar.setIdUsuario(rs.getLong("ID_USUARIO"));
+                    avatar.setNivelEvolucao(rs.getInt("NR_NIVEL_EVOLUCAO"));
+                    avatar.setExperiencia(rs.getInt("QT_EXPERIENCIA"));
+                    avatar.setTemperamento(rs.getString("DS_TEMPERAMENTO"));
+                    return avatar;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro na consulta: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public boolean atualizar(Connection conexao, AvatarTO avatar) {
+        String sql = "update AVATAR set NR_NIVEL_EVOLUCAO = ?, QT_EXPERIENCIA = ?, DS_TEMPERAMENTO = ? where ID_AVATAR = ?";
+        try (PreparedStatement ps = conexao.prepareStatement(sql)) {
+            ps.setInt(1, avatar.getNivelEvolucao());
+            ps.setInt(2, avatar.getExperiencia());
+            ps.setString(3, avatar.getTemperamento());
+            ps.setLong(4, avatar.getIdAvatar());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.out.println("Erro ao atualizar: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean excluirPorUsuario(Connection conexao, Long idUsuario) {
+        String sql = "delete from AVATAR where ID_USUARIO = ?";
+        try (PreparedStatement ps = conexao.prepareStatement(sql)) {
+            ps.setLong(1, idUsuario);
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Erro ao excluir avatar do usuário: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public AvatarTO inserir(Connection conexao, AvatarTO avatar) {
+        String sql = "insert into AVATAR (ID_USUARIO, NR_NIVEL_EVOLUCAO, QT_EXPERIENCIA, DS_TEMPERAMENTO) values (?, ?, ?, ?)";
+        try (PreparedStatement ps = conexao.prepareStatement(sql)) {
+            ps.setLong(1, avatar.getIdUsuario());
+            ps.setInt(2, avatar.getNivelEvolucao());
+            ps.setInt(3, avatar.getExperiencia());
+            ps.setString(4, avatar.getTemperamento());
+            if (ps.executeUpdate() == 0) {
+                return null;
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao inserir: " + e.getMessage());
+            return null;
+        }
+        return avatar;
+    }
+
     public ArrayList<AvatarTO> listarTodos() {
         ArrayList<AvatarTO> avatares = new ArrayList<>();
         String sql = "select * from AVATAR order by ID_AVATAR";

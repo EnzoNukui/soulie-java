@@ -7,6 +7,28 @@ import java.util.ArrayList;
 
 public class MissaoDAO {
 
+    public MissaoTO buscarPorId(Connection conexao, Long idMissao) {
+        String sql = "select * from MISSAO where ID_MISSAO = ?";
+        try (PreparedStatement ps = conexao.prepareStatement(sql)) {
+            ps.setLong(1, idMissao);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    MissaoTO missao = new MissaoTO();
+                    missao.setIdMissao(rs.getLong("ID_MISSAO"));
+                    missao.setNome(rs.getString("NM_MISSAO"));
+                    missao.setDescricao(rs.getString("DS_MISSAO"));
+                    missao.setPontosRecompensa(rs.getInt("QT_PONTOS_RECOMPENSA"));
+                    missao.setIdUsuarioCriador(rs.getObject("ID_USUARIO_CRIADOR", Long.class));
+                    missao.setMetaDias(rs.getInt("QT_META_DIAS"));
+                    return missao;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro na consulta: " + e.getMessage());
+        }
+        return null;
+    }
+
     public ArrayList<MissaoTO> listarTodas() {
         ArrayList<MissaoTO> missoes = new ArrayList<>();
         String sql = "select * from MISSAO order by ID_MISSAO";

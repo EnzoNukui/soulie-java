@@ -69,7 +69,8 @@ public class UsuarioMissaoResource {
             if (resultado != null) {
                 return ResponseEntity.status(HttpStatus.OK).body(resultado);
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Participação na missão não encontrada para atualização.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("O status e as datas da participação são controlados pelo registro de atividades.");
             }
 
         } catch (Exception e) {
@@ -82,7 +83,8 @@ public class UsuarioMissaoResource {
         if (usuarioMissaoBO.excluir(idUsuario, idMissao)) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Participação na missão excluída com sucesso.");
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Participação na missão não encontrada.");
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Não é possível remover a participação se ela estiver concluída ou tiver atividades registradas.");
         }
     }
 }

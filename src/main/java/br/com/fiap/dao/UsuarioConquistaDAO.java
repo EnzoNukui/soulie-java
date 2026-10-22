@@ -7,6 +7,41 @@ import java.util.ArrayList;
 
 public class UsuarioConquistaDAO {
 
+    public UsuarioConquistaTO buscarPorIds(Connection conexao, Long idUsuario, Long idConquista) {
+        String sql = "select * from USUARIO_CONQUISTA where ID_USUARIO = ? and ID_CONQUISTA = ?";
+        try (PreparedStatement ps = conexao.prepareStatement(sql)) {
+            ps.setLong(1, idUsuario);
+            ps.setLong(2, idConquista);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    UsuarioConquistaTO usuarioConquista = new UsuarioConquistaTO();
+                    usuarioConquista.setIdUsuario(rs.getLong("ID_USUARIO"));
+                    usuarioConquista.setIdConquista(rs.getLong("ID_CONQUISTA"));
+                    usuarioConquista.setDataConquista(rs.getDate("DT_CONQUISTA").toLocalDate());
+                    return usuarioConquista;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro na consulta: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public UsuarioConquistaTO inserir(Connection conexao, UsuarioConquistaTO usuarioConquista) {
+        String sql = "insert into USUARIO_CONQUISTA (ID_USUARIO, ID_CONQUISTA, DT_CONQUISTA) values (?, ?, ?)";
+        try (PreparedStatement ps = conexao.prepareStatement(sql)) {
+            ps.setLong(1, usuarioConquista.getIdUsuario());
+            ps.setLong(2, usuarioConquista.getIdConquista());
+            ps.setDate(3, Date.valueOf(usuarioConquista.getDataConquista()));
+            if (ps.executeUpdate() > 0) {
+                return usuarioConquista;
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao inserir conquista do usuário: " + e.getMessage());
+        }
+        return null;
+    }
+
     public ArrayList<UsuarioConquistaTO> listarPorUsuario(Long idUsuario) {
         ArrayList<UsuarioConquistaTO> conquistas = new ArrayList<>();
         String sql = "select * from USUARIO_CONQUISTA where ID_USUARIO = ? order by ID_CONQUISTA";

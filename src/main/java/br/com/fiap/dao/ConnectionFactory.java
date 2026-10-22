@@ -7,6 +7,30 @@ import java.sql.SQLException;
 public class ConnectionFactory {
     private static Connection connection;
 
+    /** Abre uma conexão exclusiva para operações que precisam de transação. */
+    public static Connection getNewConnection() {
+        try {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+        } catch (ClassNotFoundException e) {
+            System.out.println("Erro nome da classe: " + e.getMessage());
+            return null;
+        }
+
+        String url = System.getenv("DB_URL");
+        String usuario = System.getenv("DB_USER");
+        String senha = System.getenv("DB_PASSWORD");
+        if (url == null || usuario == null || senha == null) {
+            System.out.println("As variáveis de ambiente do banco não estão configuradas corretamente");
+            return null;
+        }
+        try {
+            return DriverManager.getConnection(url, usuario, senha);
+        } catch (SQLException e) {
+            System.out.println("Erro de SQL: " + e.getMessage());
+            return null;
+        }
+    }
+
     public static void closeConnection(){
         try {
             if (!connection.isClosed()){

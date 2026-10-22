@@ -20,15 +20,18 @@ public class UsuarioConquistaBO {
     }
 
     public UsuarioConquistaTO inserir(UsuarioConquistaTO usuarioConquista) {
-        return usuarioConquistaDAO.inserir(usuarioConquista);
+        // Conquistas são concedidas automaticamente pelas regras de atividade.
+        return null;
     }
 
     public UsuarioConquistaTO atualizar(UsuarioConquistaTO usuarioConquista) {
-        return usuarioConquistaDAO.atualizar(usuarioConquista);
+        // A data de concessão é definida pelo sistema.
+        return null;
     }
 
     public boolean excluir(Long idUsuario, Long idConquista) {
-        return usuarioConquistaDAO.excluir(idUsuario, idConquista);
+        // A concessão registrada faz parte do histórico da jornada.
+        return false;
     }
 
 }

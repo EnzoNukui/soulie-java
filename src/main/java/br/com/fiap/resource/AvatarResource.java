@@ -50,7 +50,8 @@ public class AvatarResource {
             if (resultado != null) {
                 return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
             } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Não foi possível cadastrar o avatar.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("O avatar é criado automaticamente junto com o usuário.");
             }
 
         } catch (Exception e) {
@@ -79,7 +80,8 @@ public class AvatarResource {
         if (avatarBO.excluir(idAvatar)) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Avatar excluído com sucesso.");
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Avatar não encontrado.");
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("O avatar faz parte da jornada e não pode ser excluído.");
         }
     }
 }

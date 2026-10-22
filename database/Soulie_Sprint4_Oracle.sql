@@ -138,6 +138,22 @@ WHERE DS_EMAIL = 'teste.usuario@soulie.com';
 INSERT INTO CONQUISTA (NM_CONQUISTA, DS_CONQUISTA)
 VALUES ('Primeira conquista', 'Conquista inicial para testes.');
 
+-- Conquistas usadas automaticamente pelas regras de atividade.
+INSERT INTO CONQUISTA (NM_CONQUISTA, DS_CONQUISTA)
+VALUES ('Primeiros passos', 'Concluiu uma missão pela primeira vez.');
+
+INSERT INTO CONQUISTA (NM_CONQUISTA, DS_CONQUISTA)
+VALUES ('Consistência', 'Manteve atividades em dias consecutivos.');
+
+INSERT INTO CONQUISTA (NM_CONQUISTA, DS_CONQUISTA)
+VALUES ('Semana sustentável', 'Alcançou sete dias consecutivos de atividade.');
+
+INSERT INTO CONQUISTA (NM_CONQUISTA, DS_CONQUISTA)
+VALUES ('Compromisso verde', 'Concluiu cinco missões oficiais.');
+
+INSERT INTO CONQUISTA (NM_CONQUISTA, DS_CONQUISTA)
+VALUES ('Soulie evoluída', 'Alcançou o nível três do avatar.');
+
 INSERT INTO COMUNIDADE (NM_COMUNIDADE, DS_TEMA)
 VALUES ('Comunidade de Teste', 'Testes da API Soulie.');
 

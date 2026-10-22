@@ -50,7 +50,8 @@ public class StreakResource {
             if (resultado != null) {
                 return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
             } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Não foi possível cadastrar o streak.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("O streak é criado automaticamente junto com o usuário.");
             }
 
         } catch (Exception e) {
@@ -66,7 +67,8 @@ public class StreakResource {
             if (resultado != null) {
                 return ResponseEntity.status(HttpStatus.OK).body(resultado);
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Streak não encontrado para atualização.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("O streak é atualizado automaticamente pelas atividades.");
             }
 
         } catch (Exception e) {
@@ -79,7 +81,8 @@ public class StreakResource {
         if (streakBO.excluir(idStreak)) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Streak excluído com sucesso.");
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Streak não encontrado.");
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("O streak faz parte da jornada e não pode ser excluído.");
         }
     }
 }

@@ -40,7 +40,8 @@ public class MissaoResource {
             if (resultado != null) {
                 return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
             } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Não foi possível cadastrar a missão.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("Informe um usuário criador válido. Missões oficiais são cadastradas pelo sistema.");
             }
 
         } catch (Exception e) {
@@ -56,7 +57,8 @@ public class MissaoResource {
             if (resultado != null) {
                 return ResponseEntity.status(HttpStatus.OK).body(resultado);
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Missão não encontrada para atualização.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("Missões oficiais são gerenciadas pelo sistema e não podem ser atualizadas por esta rota.");
             }
 
         } catch (Exception e) {
@@ -69,7 +71,8 @@ public class MissaoResource {
         if (missaoBO.excluir(idMissao)) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Missão excluída com sucesso.");
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Missão não encontrada.");
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("A missão não foi encontrada, é oficial ou possui participações vinculadas.");
         }
     }
 }

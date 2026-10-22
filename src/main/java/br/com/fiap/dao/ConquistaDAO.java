@@ -7,6 +7,25 @@ import java.util.ArrayList;
 
 public class ConquistaDAO {
 
+    public ConquistaTO buscarPorNome(Connection conexao, String nome) {
+        String sql = "select * from CONQUISTA where NM_CONQUISTA = ?";
+        try (PreparedStatement ps = conexao.prepareStatement(sql)) {
+            ps.setString(1, nome);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    ConquistaTO conquista = new ConquistaTO();
+                    conquista.setIdConquista(rs.getLong("ID_CONQUISTA"));
+                    conquista.setNome(rs.getString("NM_CONQUISTA"));
+                    conquista.setDescricao(rs.getString("DS_CONQUISTA"));
+                    return conquista;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao buscar conquista: " + e.getMessage());
+        }
+        return null;
+    }
+
     public ArrayList<ConquistaTO> listarTodas() {
         ArrayList<ConquistaTO> conquistas = new ArrayList<>();
         String sql = "select * from CONQUISTA order by ID_CONQUISTA";

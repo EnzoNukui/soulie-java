@@ -121,8 +121,9 @@ Os caminhos abaixo são relativos ao endereço base. Por exemplo, `GET /usuarios
 | `GET` | `/usuarios` | Lista os usuários |
 | `GET` | `/usuarios/{idUsuario}` | Busca pelo código |
 | `GET` | `/usuarios/email?email={email}` | Busca pelo endereço de e-mail |
+| `GET` | `/usuarios/jornada/{identificadorJornada}` | Busca uma jornada pelo identificador |
 | `POST` | `/usuarios` | Cadastra um usuário |
-| `PUT` | `/usuarios/{idUsuario}` | Atualiza um usuário |
+| `PUT` | `/usuarios/{idUsuario}` | Atualiza nome e e-mail |
 | `DELETE` | `/usuarios/{idUsuario}` | Exclui um usuário |
 
 ### Avatares — `/avatares`
@@ -132,9 +133,9 @@ Os caminhos abaixo são relativos ao endereço base. Por exemplo, `GET /usuarios
 | `GET` | `/avatares` | Lista os avatares |
 | `GET` | `/avatares/{idAvatar}` | Busca pelo código |
 | `GET` | `/avatares/usuario/{idUsuario}` | Busca o avatar de um usuário |
-| `POST` | `/avatares` | Cadastra um avatar |
-| `PUT` | `/avatares/{idAvatar}` | Atualiza um avatar |
-| `DELETE` | `/avatares/{idAvatar}` | Exclui um avatar |
+| `POST` | `/avatares` | Não permitido; o avatar é criado com o usuário |
+| `PUT` | `/avatares/{idAvatar}` | Atualiza o temperamento; usuário e evolução são preservados |
+| `DELETE` | `/avatares/{idAvatar}` | Não permitido; o avatar integra a jornada |
 
 ### Streaks — `/streaks`
 
@@ -143,9 +144,9 @@ Os caminhos abaixo são relativos ao endereço base. Por exemplo, `GET /usuarios
 | `GET` | `/streaks` | Lista os streaks |
 | `GET` | `/streaks/{idStreak}` | Busca pelo código |
 | `GET` | `/streaks/usuario/{idUsuario}` | Busca o streak de um usuário |
-| `POST` | `/streaks` | Cadastra um streak |
-| `PUT` | `/streaks/{idStreak}` | Atualiza um streak |
-| `DELETE` | `/streaks/{idStreak}` | Exclui um streak |
+| `POST` | `/streaks` | Não permitido; o streak é criado com o usuário |
+| `PUT` | `/streaks/{idStreak}` | Não permitido; os dados são calculados pelas atividades |
+| `DELETE` | `/streaks/{idStreak}` | Não permitido; o streak integra a jornada |
 
 ### Missões — `/missoes`
 
@@ -153,9 +154,9 @@ Os caminhos abaixo são relativos ao endereço base. Por exemplo, `GET /usuarios
 | --- | --- | --- |
 | `GET` | `/missoes` | Lista as missões |
 | `GET` | `/missoes/{idMissao}` | Busca pelo código |
-| `POST` | `/missoes` | Cadastra uma missão |
-| `PUT` | `/missoes/{idMissao}` | Atualiza uma missão |
-| `DELETE` | `/missoes/{idMissao}` | Exclui uma missão |
+| `POST` | `/missoes` | Cadastra uma missão de usuário; exige `idUsuarioCriador` |
+| `PUT` | `/missoes/{idMissao}` | Atualiza uma missão de usuário; missões oficiais são gerenciadas pelo sistema |
+| `DELETE` | `/missoes/{idMissao}` | Exclui missão de usuário sem participações; missões oficiais são preservadas |
 
 ### Participação em missões — `/usuario-missoes`
 
@@ -165,8 +166,8 @@ Os caminhos abaixo são relativos ao endereço base. Por exemplo, `GET /usuarios
 | `GET` | `/usuario-missoes/missao/{idMissao}` | Lista os usuários de uma missão |
 | `GET` | `/usuario-missoes/{idUsuario}/{idMissao}` | Busca a relação entre usuário e missão |
 | `POST` | `/usuario-missoes` | Registra a participação |
-| `PUT` | `/usuario-missoes/{idUsuario}/{idMissao}` | Atualiza a participação |
-| `DELETE` | `/usuario-missoes/{idUsuario}/{idMissao}` | Remove a participação |
+| `PUT` | `/usuario-missoes/{idUsuario}/{idMissao}` | Não permitido; status e datas são controlados pelas atividades |
+| `DELETE` | `/usuario-missoes/{idUsuario}/{idMissao}` | Remove participação sem atividades, se ainda estiver em andamento |
 
 ### Atividades — `/atividades`
 
@@ -186,9 +187,9 @@ Os caminhos abaixo são relativos ao endereço base. Por exemplo, `GET /usuarios
 | --- | --- | --- |
 | `GET` | `/conquistas` | Lista as conquistas |
 | `GET` | `/conquistas/{idConquista}` | Busca pelo código |
-| `POST` | `/conquistas` | Cadastra uma conquista |
-| `PUT` | `/conquistas/{idConquista}` | Atualiza uma conquista |
-| `DELETE` | `/conquistas/{idConquista}` | Exclui uma conquista |
+| `POST` | `/conquistas` | Cadastra uma conquista personalizada; nomes reservados são rejeitados |
+| `PUT` | `/conquistas/{idConquista}` | Atualiza uma conquista personalizada; as automáticas são protegidas |
+| `DELETE` | `/conquistas/{idConquista}` | Exclui uma conquista personalizada sem vínculos |
 
 ### Conquistas de usuários — `/usuario-conquistas`
 
@@ -197,9 +198,9 @@ Os caminhos abaixo são relativos ao endereço base. Por exemplo, `GET /usuarios
 | `GET` | `/usuario-conquistas/usuario/{idUsuario}` | Lista as conquistas de um usuário |
 | `GET` | `/usuario-conquistas/conquista/{idConquista}` | Lista os usuários que receberam uma conquista |
 | `GET` | `/usuario-conquistas/{idUsuario}/{idConquista}` | Busca a relação entre usuário e conquista |
-| `POST` | `/usuario-conquistas` | Atribui uma conquista a um usuário |
-| `PUT` | `/usuario-conquistas/{idUsuario}/{idConquista}` | Atualiza a relação |
-| `DELETE` | `/usuario-conquistas/{idUsuario}/{idConquista}` | Remove a relação |
+| `POST` | `/usuario-conquistas` | Não permitido; conquistas são concedidas pelo sistema |
+| `PUT` | `/usuario-conquistas/{idUsuario}/{idConquista}` | Não permitido; a concessão é controlada pelo sistema |
+| `DELETE` | `/usuario-conquistas/{idUsuario}/{idConquista}` | Não permitido; a concessão integra o histórico |
 
 ### Comunidades — `/comunidades`
 
@@ -234,20 +235,35 @@ Os caminhos abaixo são relativos ao endereço base. Por exemplo, `GET /usuarios
 | `PUT` | `/postagens/{idPostagem}` | Atualiza uma postagem |
 | `DELETE` | `/postagens/{idPostagem}` | Exclui uma postagem |
 
+### Regras automáticas da jornada
+
+- O cadastro de usuário cria, na mesma operação, o avatar inicial e o streak zerado. O sistema gera o identificador da jornada e inicia os pontos em zero.
+- O usuário pode alterar nome e e-mail. Pontos, status e identificador da jornada são preservados pelo sistema.
+- A exclusão do usuário remove avatar e streak na mesma transação. Se existirem outros registros vinculados, a operação é revertida para preservar esses dados.
+- O registro de atividade usa a data atual do servidor. Ele atualiza o streak e, ao cumprir uma missão oficial, soma os pontos de recompensa à pontuação e à experiência do avatar.
+- A experiência define o nível do avatar: 1 a partir de 0, 2 a partir de 100, 3 a partir de 250, 4 a partir de 450 e 5 a partir de 700.
+- Uma missão é concluída ao atingir sua meta de dias distintos desde o início da participação. Missões criadas por usuários não concedem pontos nem experiência.
+- Missões oficiais têm `idUsuarioCriador` nulo e são cadastradas diretamente pelo sistema. A API exige um criador para novas missões e não permite alterar missões oficiais.
+- O cliente não pode editar o status ou as datas da participação. A exclusão só é permitida enquanto estiver em andamento e sem atividades registradas.
+- As conquistas `Primeiros passos`, `Consistência`, `Semana sustentável`, `Compromisso verde` e `Soulie evoluída` são concedidas automaticamente ao cumprir seus critérios. O modelo Oracle foi mantido como está; por isso, os nomes dessas cinco conquistas são as referências usadas pelo código, ficam reservados e não devem ser alterados. Os scripts do projeto incluem esses registros.
+- O feed geral e os feeds por usuário ou comunidade exibem as publicações mais recentes primeiro.
+- Os endpoints de escrita de streak e de vínculo de conquista, além da criação e exclusão de avatar, são mantidos na API, mas as BOs rejeitam alterações manuais desses dados calculados ou vinculados à jornada.
+- As rotas bloqueadas respondem com `400 Bad Request` para criação/atualização e `409 Conflict` para exclusões, com a explicação no corpo da resposta.
+
 ## Modelos e validações
 
 Os campos `id...` que identificam entidades são gerados pelo Oracle no cadastro. Corpos de `POST` e `PUT` devem usar os nomes abaixo em camelCase. Os vínculos entre tabelas continuam exigindo os códigos relacionados.
 
 | Modelo | Campos | Regras principais |
 | --- | --- | --- |
-| `UsuarioTO` | `idUsuario`, `nomeUsuario`, `email`, `pontosAcumulados`, `status`, `identificadorJornada` | Nome e e-mail obrigatórios; e-mail válido; status `A` ou `I`; pontos não negativos |
-| `AvatarTO` | `idAvatar`, `idUsuario`, `nivelEvolucao`, `experiencia`, `temperamento` | `idUsuario` obrigatório e positivo; nível positivo quando informado; experiência não negativa |
-| `StreakTO` | `idStreak`, `idUsuario`, `diasConsecutivos`, `dataUltimaAtividade` | Usuário, dias e data obrigatórios; dias não negativos; data não futura |
-| `MissaoTO` | `idMissao`, `nome`, `descricao`, `pontosRecompensa`, `idUsuarioCriador`, `metaDias` | Nome e descrição obrigatórios; pontos não negativos; `metaDias` positivo; criador positivo quando informado |
+| `UsuarioTO` | `idUsuario`, `nomeUsuario`, `email`, `pontosAcumulados`, `status`, `identificadorJornada` | Nome e e-mail obrigatórios; e-mail válido. Pontos, status e identificador são controlados pelo sistema |
+| `AvatarTO` | `idAvatar`, `idUsuario`, `nivelEvolucao`, `experiencia`, `temperamento` | A criação ocorre junto com o usuário; nível e experiência são controlados pelas atividades |
+| `StreakTO` | `idStreak`, `idUsuario`, `diasConsecutivos`, `dataUltimaAtividade` | Criado junto com o usuário; dias e data são calculados com base nas atividades |
+| `MissaoTO` | `idMissao`, `nome`, `descricao`, `pontosRecompensa`, `idUsuarioCriador`, `metaDias` | Nome e descrição obrigatórios; pontos não negativos; `metaDias` positivo; criador obrigatório e válido na criação pela API |
 | `UsuarioMissaoTO` | `idUsuario`, `idMissao`, `dataInicio`, `dataConclusao`, `status` | Usuário, missão e início obrigatórios; datas não futuras; status com até 15 caracteres |
-| `AtividadeTO` | `idRegistro`, `idUsuario`, `idMissao`, `dataRegistro`, `observacao` | Usuário, missão e data obrigatórios; IDs positivos; data não futura; observação até 200 caracteres |
+| `AtividadeTO` | `idRegistro`, `idUsuario`, `idMissao`, `dataRegistro`, `observacao` | Usuário e missão obrigatórios; IDs positivos; data atribuída pelo servidor; observação até 200 caracteres |
 | `ConquistaTO` | `idConquista`, `nome`, `descricao` | Nome obrigatório; nome até 70 e descrição até 80 caracteres |
-| `UsuarioConquistaTO` | `idUsuario`, `idConquista`, `dataConquista` | IDs positivos e data obrigatórios; data não futura |
+| `UsuarioConquistaTO` | `idUsuario`, `idConquista`, `dataConquista` | Conquistas são atribuídas pelo sistema quando as regras são cumpridas |
 | `ComunidadeTO` | `idComunidade`, `nome`, `tema` | Nome obrigatório (até 50 caracteres); tema até 90 caracteres |
 | `UsuarioComunidadeTO` | `idUsuario`, `idComunidade`, `dataIngresso` | IDs positivos e data obrigatórios; data não futura |
 | `PostagemTO` | `idPostagem`, `idUsuario`, `idComunidade`, `titulo`, `conteudo`, `dataPostagem` | IDs e data obrigatórios; título até 80 e conteúdo até 200 caracteres; data não futura |
@@ -266,14 +282,11 @@ Content-Type: application/json
 ```json
 {
   "nomeUsuario": "Enzo",
-  "email": "enzo@example.com",
-  "pontosAcumulados": 0,
-  "status": "A",
-  "identificadorJornada": "jornada-inicial"
+  "email": "enzo@example.com"
 }
 ```
 
-Em caso de sucesso, a resposta é `201 Created` e contém o usuário cadastrado, incluindo o código gerado pelo banco.
+Em caso de sucesso, a resposta é `201 Created` e contém o usuário cadastrado, incluindo o código gerado pelo banco e o identificador de jornada criado pelo sistema. A API também cria o avatar e o streak iniciais na mesma operação. Pontos começam em zero e não são aceitos do cliente.
 
 ### Buscar usuário por e-mail
 
@@ -290,27 +303,6 @@ GET /usuarios/email?email=enzo@example.com
   "pontosRecompensa": 20,
   "idUsuarioCriador": 1,
   "metaDias": 7
-}
-```
-
-### Criar um avatar
-
-```json
-{
-  "idUsuario": 1,
-  "nivelEvolucao": 1,
-  "experiencia": 0,
-  "temperamento": "curioso"
-}
-```
-
-### Criar um streak
-
-```json
-{
-  "idUsuario": 1,
-  "diasConsecutivos": 3,
-  "dataUltimaAtividade": "2026-10-21"
 }
 ```
 
@@ -332,10 +324,11 @@ GET /usuarios/email?email=enzo@example.com
 {
   "idUsuario": 1,
   "idMissao": 2,
-  "dataRegistro": "2026-10-21",
   "observacao": "Atividade concluída hoje."
 }
 ```
+
+A data do registro é definida pelo servidor. Ao salvar uma atividade, o sistema atualiza o streak, conclui a missão quando a meta de dias distintos é atingida, soma pontos e experiência de missões oficiais, calcula o nível do avatar e verifica as conquistas automáticas.
 
 ### Cadastrar uma conquista
 
@@ -343,16 +336,6 @@ GET /usuarios/email?email=enzo@example.com
 {
   "nome": "Primeiros passos",
   "descricao": "Concluiu a primeira missão."
-}
-```
-
-### Atribuir conquista a usuário
-
-```json
-{
-  "idUsuario": 1,
-  "idConquista": 1,
-  "dataConquista": "2026-10-21"
 }
 ```
 
@@ -387,7 +370,7 @@ GET /usuarios/email?email=enzo@example.com
 }
 ```
 
-Os exemplos de participação exigem que os códigos de usuário, missão, conquista ou comunidade já existam no banco. As datas são ilustrativas e precisam ser iguais ou anteriores à data atual.
+Os exemplos de participação exigem que os códigos de usuário, missão ou comunidade já existam no banco. As datas informadas são ilustrativas e precisam ser iguais ou anteriores à data atual. Pontos, experiência, nível, streak e concessão de conquistas são mantidos pelas regras de negócio, sem edição manual por essas rotas.
 
 ## Respostas HTTP
 

@@ -44,6 +44,16 @@ public class UsuarioResource {
         }
     }
 
+    @GetMapping("/jornada/{identificadorJornada}")
+    public ResponseEntity<?> buscarPorIdentificadorJornada(@PathVariable String identificadorJornada) {
+        UsuarioTO usuario = usuarioBO.buscarPorIdentificadorJornada(identificadorJornada);
+        if (usuario != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(usuario);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Jornada não encontrada.");
+        }
+    }
+
     @PostMapping
     public ResponseEntity<?> inserir(@RequestBody @Valid UsuarioTO usuario) {
         try {
@@ -79,6 +89,9 @@ public class UsuarioResource {
     public ResponseEntity<String> excluir(@PathVariable Long idUsuario) {
         if (usuarioBO.excluir(idUsuario)) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Usuário excluído com sucesso.");
+        } else if (usuarioBO.buscarPorId(idUsuario) != null) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Usuário possui dados vinculados e não pode ser excluído.");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado.");
         }

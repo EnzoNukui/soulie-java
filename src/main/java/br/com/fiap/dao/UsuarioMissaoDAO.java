@@ -7,6 +7,63 @@ import java.util.ArrayList;
 
 public class UsuarioMissaoDAO {
 
+    public int contarMissoesOficiaisConcluidas(Connection conexao, Long idUsuario) {
+        String sql = "select count(*) from USUARIO_MISSAO um join MISSAO m "
+                + "on um.ID_MISSAO = m.ID_MISSAO "
+                + "where um.ID_USUARIO = ? and um.ST_MISSAO = 'CONCLUIDA' "
+                + "and m.ID_USUARIO_CRIADOR is null";
+        try (PreparedStatement ps = conexao.prepareStatement(sql)) {
+            ps.setLong(1, idUsuario);
+            try (ResultSet rs = ps.executeQuery()) {
+                rs.next();
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao contar missões oficiais concluídas: " + e.getMessage());
+            return -1;
+        }
+    }
+
+    public UsuarioMissaoTO buscarPorIds(Connection conexao, Long idUsuario, Long idMissao) {
+        String sql = "select * from USUARIO_MISSAO where ID_USUARIO = ? and ID_MISSAO = ? for update";
+        try (PreparedStatement ps = conexao.prepareStatement(sql)) {
+            ps.setLong(1, idUsuario);
+            ps.setLong(2, idMissao);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    UsuarioMissaoTO participacao = new UsuarioMissaoTO();
+                    participacao.setIdUsuario(rs.getLong("ID_USUARIO"));
+                    participacao.setIdMissao(rs.getLong("ID_MISSAO"));
+                    participacao.setDataInicio(rs.getDate("DT_INICIO").toLocalDate());
+                    Date conclusao = rs.getDate("DT_CONCLUSAO");
+                    participacao.setDataConclusao(conclusao == null ? null : conclusao.toLocalDate());
+                    participacao.setStatus(rs.getString("ST_MISSAO"));
+                    return participacao;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro na consulta: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public boolean atualizar(Connection conexao, UsuarioMissaoTO participacao) {
+        String sql = "update USUARIO_MISSAO set DT_INICIO = ?, DT_CONCLUSAO = ?, ST_MISSAO = ? "
+                + "where ID_USUARIO = ? and ID_MISSAO = ?";
+        try (PreparedStatement ps = conexao.prepareStatement(sql)) {
+            ps.setDate(1, Date.valueOf(participacao.getDataInicio()));
+            ps.setDate(2, participacao.getDataConclusao() == null
+                    ? null : Date.valueOf(participacao.getDataConclusao()));
+            ps.setString(3, participacao.getStatus());
+            ps.setLong(4, participacao.getIdUsuario());
+            ps.setLong(5, participacao.getIdMissao());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.out.println("Erro ao atualizar: " + e.getMessage());
+            return false;
+        }
+    }
+
     public ArrayList<UsuarioMissaoTO> listarPorUsuario(Long idUsuario) {
         ArrayList<UsuarioMissaoTO> missoes = new ArrayList<>();
         String sql = "select * from USUARIO_MISSAO where ID_USUARIO = ? order by ID_MISSAO";

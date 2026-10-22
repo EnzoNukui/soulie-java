@@ -2,7 +2,6 @@ package br.com.fiap.to;
 
 import java.time.LocalDate;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
@@ -14,8 +13,6 @@ public class AtividadeTO {
     @NotNull
     @Positive
     private Long idMissao;
-    @NotNull
-    @PastOrPresent
     private LocalDate dataRegistro;
     @Size(max = 200)
     private String observacao;

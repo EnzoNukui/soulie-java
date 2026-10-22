@@ -20,15 +20,30 @@ public class AvatarBO {
     }
 
     public AvatarTO inserir(AvatarTO avatar) {
-        return avatarDAO.inserir(avatar);
+        // O avatar é criado junto com o usuário para manter a jornada consistente.
+        return null;
     }
 
     public AvatarTO atualizar(AvatarTO avatar) {
+        if (avatar == null || avatar.getIdAvatar() == null) {
+            return null;
+        }
+
+        AvatarTO avatarAtual = avatarDAO.buscarPorId(avatar.getIdAvatar());
+        if (avatarAtual == null) {
+            return null;
+        }
+
+        // Evolução e experiência são atualizadas pelo registro de atividades.
+        avatar.setIdUsuario(avatarAtual.getIdUsuario());
+        avatar.setNivelEvolucao(avatarAtual.getNivelEvolucao());
+        avatar.setExperiencia(avatarAtual.getExperiencia());
         return avatarDAO.atualizar(avatar);
     }
 
     public boolean excluir(Long idAvatar) {
-        return avatarDAO.excluir(idAvatar);
+        // O avatar faz parte da jornada e não pode ser removido isoladamente.
+        return false;
     }
 
 }
