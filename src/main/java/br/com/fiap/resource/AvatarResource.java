@@ -43,22 +43,6 @@ public class AvatarResource {
         }
     }
 
-    @PostMapping
-    public ResponseEntity<?> inserir(@RequestBody @Valid AvatarTO avatar) {
-        try {
-            AvatarTO resultado = avatarBO.inserir(avatar);
-            if (resultado != null) {
-                return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
-            } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body("O avatar é criado automaticamente junto com o usuário.");
-            }
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao inserir o registro.");
-        }
-    }
-
     @PutMapping("/{idAvatar}")
     public ResponseEntity<?> atualizar(@PathVariable Long idAvatar, @RequestBody @Valid AvatarTO avatar) {
         try {
@@ -75,13 +59,4 @@ public class AvatarResource {
         }
     }
 
-    @DeleteMapping("/{idAvatar}")
-    public ResponseEntity<String> excluir(@PathVariable Long idAvatar) {
-        if (avatarBO.excluir(idAvatar)) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Avatar excluído com sucesso.");
-        } else {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body("O avatar faz parte da jornada e não pode ser excluído.");
-        }
-    }
 }

@@ -164,29 +164,6 @@ public class UsuarioMissaoDAO {
         return null;
     }
 
-    public UsuarioMissaoTO atualizar(UsuarioMissaoTO usuarioMissao) {
-        String sql = "update USUARIO_MISSAO set DT_INICIO = ?, DT_CONCLUSAO = ?, ST_MISSAO = ? where ID_USUARIO = ? and ID_MISSAO = ?";
-
-        try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {
-            ps.setDate(1, Date.valueOf(usuarioMissao.getDataInicio()));
-            ps.setDate(2, usuarioMissao.getDataConclusao() == null
-                    ? null : Date.valueOf(usuarioMissao.getDataConclusao()));
-            ps.setString(3, usuarioMissao.getStatus());
-            ps.setLong(4, usuarioMissao.getIdUsuario());
-            ps.setLong(5, usuarioMissao.getIdMissao());
-            if (ps.executeUpdate() > 0) {
-                return usuarioMissao;
-            } else {
-                return null;
-            }
-        } catch (SQLException e) {
-            System.out.println("Erro ao atualizar: " + e.getMessage());
-        } finally {
-            ConnectionFactory.closeConnection();
-        }
-        return null;
-    }
-
     public boolean excluir(Long idUsuario, Long idMissao) {
         String sql = "delete from USUARIO_MISSAO where ID_USUARIO = ? and ID_MISSAO = ?";
 

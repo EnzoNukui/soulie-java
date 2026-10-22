@@ -133,9 +133,7 @@ Os caminhos abaixo são relativos ao endereço base. Por exemplo, `GET /usuarios
 | `GET` | `/avatares` | Lista os avatares |
 | `GET` | `/avatares/{idAvatar}` | Busca pelo código |
 | `GET` | `/avatares/usuario/{idUsuario}` | Busca o avatar de um usuário |
-| `POST` | `/avatares` | Não permitido; o avatar é criado com o usuário |
 | `PUT` | `/avatares/{idAvatar}` | Atualiza o temperamento; usuário e evolução são preservados |
-| `DELETE` | `/avatares/{idAvatar}` | Não permitido; o avatar integra a jornada |
 
 ### Streaks — `/streaks`
 
@@ -144,9 +142,6 @@ Os caminhos abaixo são relativos ao endereço base. Por exemplo, `GET /usuarios
 | `GET` | `/streaks` | Lista os streaks |
 | `GET` | `/streaks/{idStreak}` | Busca pelo código |
 | `GET` | `/streaks/usuario/{idUsuario}` | Busca o streak de um usuário |
-| `POST` | `/streaks` | Não permitido; o streak é criado com o usuário |
-| `PUT` | `/streaks/{idStreak}` | Não permitido; os dados são calculados pelas atividades |
-| `DELETE` | `/streaks/{idStreak}` | Não permitido; o streak integra a jornada |
 
 ### Missões — `/missoes`
 
@@ -166,7 +161,6 @@ Os caminhos abaixo são relativos ao endereço base. Por exemplo, `GET /usuarios
 | `GET` | `/usuario-missoes/missao/{idMissao}` | Lista os usuários de uma missão |
 | `GET` | `/usuario-missoes/{idUsuario}/{idMissao}` | Busca a relação entre usuário e missão |
 | `POST` | `/usuario-missoes` | Registra a participação |
-| `PUT` | `/usuario-missoes/{idUsuario}/{idMissao}` | Não permitido; status e datas são controlados pelas atividades |
 | `DELETE` | `/usuario-missoes/{idUsuario}/{idMissao}` | Remove participação sem atividades, se ainda estiver em andamento |
 
 ### Atividades — `/atividades`
@@ -198,9 +192,6 @@ Os caminhos abaixo são relativos ao endereço base. Por exemplo, `GET /usuarios
 | `GET` | `/usuario-conquistas/usuario/{idUsuario}` | Lista as conquistas de um usuário |
 | `GET` | `/usuario-conquistas/conquista/{idConquista}` | Lista os usuários que receberam uma conquista |
 | `GET` | `/usuario-conquistas/{idUsuario}/{idConquista}` | Busca a relação entre usuário e conquista |
-| `POST` | `/usuario-conquistas` | Não permitido; conquistas são concedidas pelo sistema |
-| `PUT` | `/usuario-conquistas/{idUsuario}/{idConquista}` | Não permitido; a concessão é controlada pelo sistema |
-| `DELETE` | `/usuario-conquistas/{idUsuario}/{idConquista}` | Não permitido; a concessão integra o histórico |
 
 ### Comunidades — `/comunidades`
 

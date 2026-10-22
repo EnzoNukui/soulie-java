@@ -36,19 +36,4 @@ public class StreakBO {
         return streak;
     }
 
-    public StreakTO inserir(StreakTO streak) {
-        // O streak é criado junto com o usuário e atualizado pelas atividades.
-        return null;
-    }
-
-    public StreakTO atualizar(StreakTO streak) {
-        // Dias e última atividade são calculados a partir do histórico de atividades.
-        return null;
-    }
-
-    public boolean excluir(Long idStreak) {
-        // O streak faz parte da jornada e não pode ser removido isoladamente.
-        return false;
-    }
-
 }

@@ -19,11 +19,6 @@ public class AvatarBO {
         return avatarDAO.buscarPorUsuario(idUsuario);
     }
 
-    public AvatarTO inserir(AvatarTO avatar) {
-        // O avatar é criado junto com o usuário para manter a jornada consistente.
-        return null;
-    }
-
     public AvatarTO atualizar(AvatarTO avatar) {
         if (avatar == null || avatar.getIdAvatar() == null) {
             return null;
@@ -39,11 +34,6 @@ public class AvatarBO {
         avatar.setNivelEvolucao(avatarAtual.getNivelEvolucao());
         avatar.setExperiencia(avatarAtual.getExperiencia());
         return avatarDAO.atualizar(avatar);
-    }
-
-    public boolean excluir(Long idAvatar) {
-        // O avatar faz parte da jornada e não pode ser removido isoladamente.
-        return false;
     }
 
 }

@@ -59,25 +59,6 @@ public class UsuarioMissaoResource {
         }
     }
 
-    @PutMapping("/{idUsuario}/{idMissao}")
-    public ResponseEntity<?> atualizar(@PathVariable Long idUsuario, @PathVariable Long idMissao,
-                                       @RequestBody @Valid UsuarioMissaoTO usuarioMissao) {
-        try {
-            usuarioMissao.setIdUsuario(idUsuario);
-            usuarioMissao.setIdMissao(idMissao);
-            UsuarioMissaoTO resultado = usuarioMissaoBO.atualizar(usuarioMissao);
-            if (resultado != null) {
-                return ResponseEntity.status(HttpStatus.OK).body(resultado);
-            } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body("O status e as datas da participação são controlados pelo registro de atividades.");
-            }
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao atualizar o registro.");
-        }
-    }
-
     @DeleteMapping("/{idUsuario}/{idMissao}")
     public ResponseEntity<String> excluir(@PathVariable Long idUsuario, @PathVariable Long idMissao) {
         if (usuarioMissaoBO.excluir(idUsuario, idMissao)) {

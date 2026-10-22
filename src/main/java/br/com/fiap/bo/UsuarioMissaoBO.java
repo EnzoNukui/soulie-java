@@ -45,11 +45,6 @@ public class UsuarioMissaoBO {
         return usuarioMissaoDAO.inserir(usuarioMissao);
     }
 
-    public UsuarioMissaoTO atualizar(UsuarioMissaoTO usuarioMissao) {
-        // Status e datas da participação são controlados pelo registro de atividades.
-        return null;
-    }
-
     public boolean excluir(Long idUsuario, Long idMissao) {
         if (idUsuario == null || idMissao == null) {
             return false;

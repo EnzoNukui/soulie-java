@@ -2,7 +2,6 @@ package br.com.fiap.resource;
 
 import br.com.fiap.bo.StreakBO;
 import br.com.fiap.to.StreakTO;
-import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,46 +42,4 @@ public class StreakResource {
         }
     }
 
-    @PostMapping
-    public ResponseEntity<?> inserir(@RequestBody @Valid StreakTO streak) {
-        try {
-            StreakTO resultado = streakBO.inserir(streak);
-            if (resultado != null) {
-                return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
-            } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body("O streak é criado automaticamente junto com o usuário.");
-            }
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao inserir o registro.");
-        }
-    }
-
-    @PutMapping("/{idStreak}")
-    public ResponseEntity<?> atualizar(@PathVariable Long idStreak, @RequestBody @Valid StreakTO streak) {
-        try {
-            streak.setIdStreak(idStreak);
-            StreakTO resultado = streakBO.atualizar(streak);
-            if (resultado != null) {
-                return ResponseEntity.status(HttpStatus.OK).body(resultado);
-            } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body("O streak é atualizado automaticamente pelas atividades.");
-            }
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao atualizar o registro.");
-        }
-    }
-
-    @DeleteMapping("/{idStreak}")
-    public ResponseEntity<String> excluir(@PathVariable Long idStreak) {
-        if (streakBO.excluir(idStreak)) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Streak excluído com sucesso.");
-        } else {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body("O streak faz parte da jornada e não pode ser excluído.");
-        }
-    }
 }
