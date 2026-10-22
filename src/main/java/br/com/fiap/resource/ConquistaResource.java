@@ -40,7 +40,8 @@ public class ConquistaResource {
             if (resultado != null) {
                 return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
             } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Não foi possível cadastrar a conquista.");
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body("Não foi possível cadastrar a conquista. Nomes usados pelas regras automáticas são reservados.");
             }
 
         } catch (Exception e) {
@@ -55,6 +56,9 @@ public class ConquistaResource {
             ConquistaTO resultado = conquistaBO.atualizar(conquista);
             if (resultado != null) {
                 return ResponseEntity.status(HttpStatus.OK).body(resultado);
+            } else if (conquistaBO.buscarPorId(idConquista) != null) {
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body("Conquistas automáticas são gerenciadas pelo sistema e não podem ser alteradas.");
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Conquista não encontrada para atualização.");
             }
@@ -68,6 +72,9 @@ public class ConquistaResource {
     public ResponseEntity<String> excluir(@PathVariable Long idConquista) {
         if (conquistaBO.excluir(idConquista)) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Conquista excluída com sucesso.");
+        } else if (conquistaBO.buscarPorId(idConquista) != null) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Conquistas automáticas ou vinculadas a usuários não podem ser excluídas.");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Conquista não encontrada.");
         }

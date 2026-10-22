@@ -9,7 +9,7 @@ public class PostagemDAO {
 
     public ArrayList<PostagemTO> listarTodas() {
         ArrayList<PostagemTO> postagens = new ArrayList<>();
-        String sql = "select * from POSTAGEM order by ID_POSTAGEM";
+        String sql = "select * from POSTAGEM order by DT_POSTAGEM desc, ID_POSTAGEM desc";
 
         try (PreparedStatement ps = ConnectionFactory.getConnection().prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
